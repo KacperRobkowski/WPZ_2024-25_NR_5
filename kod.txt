@@ -1,0 +1,29 @@
+import pandas as pd
+from PIL import Image
+import numpy as np
+
+# Wczytaj dane z pliku CSV
+data = pd.read_csv("A_Z Handwritten Data.csv", header=None)
+
+# Poproœ u¿ytkownika o wybór numeru wiersza
+row_number = int(input("Podaj numer wiersza (0 do 371999): "))
+
+# SprawdŸ, czy numer wiersza jest w poprawnym zakresie
+if 0 <= row_number < len(data):
+    # Pobierz wartoœci z wybranego wiersza i podziel je na listê liczb
+    values = list(map(int, data.iloc[row_number, 0].split(',')))
+    
+    # SprawdŸ, czy mamy wystarczaj¹co du¿o wartoœci (784) do utworzenia obrazu 28x28
+    if len(values) >= 784:
+        # Utwórz obraz 28x28, pomijaj¹c pierwsz¹ wartoœæ
+        image_array = np.array(values[1:785]).reshape(28, 28)
+
+        # Konwertuj tablicê do obrazu
+        image = Image.fromarray(image_array.astype(np.uint8))
+
+        # Wyœwietl obraz
+        image.show()
+    else:
+        print("Wiersz nie zawiera wystarczaj¹cej liczby wartoœci do utworzenia obrazu 28x28.")
+else:
+    print("Podany numer wiersza jest poza zakresem.")
